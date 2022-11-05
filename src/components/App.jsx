@@ -1,26 +1,27 @@
-import { Component } from "react";
+import { Component } from 'react';
 
-import {SearchBar} from './SearchBar';
+import { SearchBar } from './SearchBar/SearchBar';
 
-export class App extends Component  {
+export class App extends Component {
   state = {
     images: [],
     query: '',
-  }
+  };
 
-  componentDidUpdate = (_,prevState) => {
+  componentDidUpdate = (_, prevState) => {
     if (this.state.query !== prevState.query) {
-      
     }
-  }
+  };
 
   handleSubmit = query => {
-    this.setState({query});
-  }
+    this.setState({ query });
+  };
 
   render() {
-    <>
-      <SearchBar onSubmit={ this.handleSubmit } />
-    </>
+    return (
+      <>
+        <SearchBar onSubmit={this.handleSubmit} />
+      </>
+    );
   }
-};
+}

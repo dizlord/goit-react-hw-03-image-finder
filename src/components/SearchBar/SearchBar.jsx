@@ -18,14 +18,14 @@ export class SearchBar extends Component {
 
   render() {
     return (
-      <header class="searchbar">
-        <form class="form">
+      <header className="searchbar">
+        <form className="form">
           <button type="submit" class="button">
-            <span class="button-label">Search</span>
+            <span className="button-label">Search</span>
           </button>
 
           <input
-            class="input"
+            className="input"
             type="text"
             autocomplete="off"
             autofocus
