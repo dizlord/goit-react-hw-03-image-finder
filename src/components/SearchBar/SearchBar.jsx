@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { HiOutlineSearch } from "react-icons/hi";
+import PropTypes from 'prop-types';
 
 class SearchBar extends Component {
   state = {
@@ -46,6 +47,10 @@ class SearchBar extends Component {
       </header>
     );
   }
+}
+
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 }
 
 export default SearchBar;
