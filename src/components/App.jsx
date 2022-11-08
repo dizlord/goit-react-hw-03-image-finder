@@ -1,10 +1,11 @@
 import { Component } from 'react';
 
 import { fetchImages } from 'utils/api';
-import { SearchBar } from './SearchBar/SearchBar';
-import { ImageGallery } from './imageGallery/imageGallery';
-import { LoadMore } from './LoadMore/LoadMore';
-import { Loader } from './Loader/Loader';
+import SearchBar from './SearchBar';
+import ImageGallery from './imageGallery';
+import LoadMore from './LoadMore';
+import Loader from './Loader';
+import Modal from './Modal';
 
 export class App extends Component {
   state = {
@@ -12,18 +13,23 @@ export class App extends Component {
     query: '',
     page: 1,
     isLoading: false,
+    modalImage: '',
+    showModal: false,
+    totalHits: 0,
   };
 
   componentDidUpdate = (_, prevState) => {
     this.setState();
     if (this.state.query !== prevState.query || this.state.page !== prevState.page) {
       this.setState({isLoading: true});
-      fetchImages(this.state.query, this.state.page).then(images => {
+      fetchImages(this.state.query, this.state.page).then(data => {
         this.setState(prevState => ({
           images:
             this.state.page === 1
-              ? [...images]
-              : [...prevState.images, ...images],
+              ? [...data.hits]
+              : [...prevState.images, ...data.hits],
+          totalHits:
+            this.state.page === 1 ? data.totalHits - data.hits.length : data.totalHits - [...prevState.images, ...data.hits].length,
         }))
       }).finally(() => {
         this.setState({isLoading: false});
@@ -39,13 +45,22 @@ export class App extends Component {
     this.setState(state => ({page: state.page + 1, }));
   }
 
+  toggleModal = (modalImage) => {
+    if (!modalImage) {
+      this.setState({ modalImage: '', showModal: false });
+      return;
+    }
+    this.setState({modalImage, showModal: true});
+  }
+
   render() {
     return (
       <>
         <SearchBar onSubmit={this.handleSubmit} />
         { this.state.isLoading && <Loader /> }
-        <ImageGallery images={this.state.images} />
-        {!!this.state.images.length && <LoadMore onLoadMore={ this.handleLoadMore } /> }
+        <ImageGallery images={this.state.images} openModal={this.toggleModal} />
+        {!!this.state.totalHits && <LoadMore onLoadMore={this.handleLoadMore} />}
+        {this.state.showModal && <Modal modalImage={ this.state.modalImage } closeModal={this.toggleModal} />}
       </>
     );
   }
