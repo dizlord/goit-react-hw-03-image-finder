@@ -19,8 +19,10 @@ export class App extends Component {
   };
 
   componentDidUpdate = (_, prevState) => {
-    this.setState();
     if (this.state.query !== prevState.query || this.state.page !== prevState.page) {
+      if (this.state.query !== prevState.query) {
+        this.setState({ images: [], totalHits: 0, });
+      }
       this.setState({isLoading: true});
       fetchImages(this.state.query, this.state.page).then(data => {
         this.setState(prevState => ({
@@ -38,7 +40,7 @@ export class App extends Component {
   };
 
   handleSubmit = query => {
-    this.setState({ query, page: 1, });
+    this.setState({query, page: 1, });
   };
 
   handleLoadMore = () => {
@@ -48,9 +50,13 @@ export class App extends Component {
   toggleModal = (modalImage) => {
     if (!modalImage) {
       this.setState({ modalImage: '', showModal: false });
+      document.body.style.overflow = '';
+      document.body.style.maxHeight = '';
       return;
     }
-    this.setState({modalImage, showModal: true});
+    this.setState({ modalImage, showModal: true });
+    document.body.style.overflow = 'hidden';
+    document.body.style.maxHeight = '100vh';
   }
 
   render() {

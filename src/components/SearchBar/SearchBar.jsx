@@ -6,6 +6,12 @@ class SearchBar extends Component {
     query: '',
   };
 
+  componentDidMount = () => {
+    const { height: pageHeaderHeight } = document.querySelector('.Searchbar')
+      .getBoundingClientRect();
+    document.body.style.paddingTop = `${pageHeaderHeight + 5}px`;
+  }
+
   handleChange = (e) => {
     const query = e.target.value;
     this.setState({query});
